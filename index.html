@@ -1,0 +1,321 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GramBazaar | Raj Kumar Nayak</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:Arial,sans-serif;
+  background:#f5f8f0;color:#243321
+}
+header{
+  background:#164c2c;color:white;padding:18px 6%;
+  display:flex;justify-content:space-between;
+  align-items:center;flex-wrap:wrap;gap:12px
+}
+.logo{font-size:26px;font-weight:bold;color:#c8f36a}
+nav a{color:white;text-decoration:none;margin:8px;font-size:14px}
+.hero{
+  padding:65px 7%;text-align:center;color:white;
+  background:linear-gradient(130deg,#174b2a,#43844b,#9aa84a)
+}
+.hero h1{font-size:clamp(35px,7vw,58px);margin-bottom:15px}
+.hero p{line-height:1.8}
+.btn{
+  display:inline-block;padding:12px 20px;
+  border:0;border-radius:8px;background:#d5f36c;
+  color:#173c20;font-weight:bold;text-decoration:none;
+  cursor:pointer;margin-top:15px
+}
+section{padding:45px 6%}
+.heading{text-align:center;margin-bottom:25px}
+.heading h2{font-size:30px;color:#205b32;margin-bottom:8px}
+.categories,.products{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:20px
+}
+.category,.product,.about-card{
+  background:white;padding:22px;border-radius:16px;
+  box-shadow:0 5px 18px #173c2012;
+  transition:.3s
+}
+.category:hover,.product:hover{
+  transform:translateY(-6px);
+  box-shadow:0 12px 25px #173c2020
+}
+.category{text-align:center;cursor:pointer}
+.category .emoji,.photo{font-size:55px;margin-bottom:12px}
+.product{text-align:center}
+.photo{
+  height:120px;display:grid;place-items:center;
+  background:#edf5e4;border-radius:12px
+}
+.product h3{margin:12px 0}
+.price{color:#23783b;font-size:21px;font-weight:bold}
+.product input{
+  width:70px;padding:9px;border:1px solid #ccd7c6;
+  border-radius:6px;margin:12px 0
+}
+.product .btn{display:block;width:100%}
+#cart{background:#e8f1df}
+.cart-row{
+  display:flex;justify-content:space-between;
+  align-items:center;gap:12px;padding:12px 0;
+  border-bottom:1px solid #ccd8c3
+}
+.cart-row button{
+  background:#c7372f;color:white;border:0;
+  padding:7px 10px;border-radius:5px;cursor:pointer
+}
+.total{font-size:23px;font-weight:bold;margin-top:20px}
+#customerForm{
+  display:grid;gap:12px;max-width:500px;margin:20px auto
+}
+#customerForm input,#customerForm textarea{
+  padding:13px;border:1px solid #cbd7c5;
+  border-radius:8px;font:inherit;width:100%
+}
+footer{
+  text-align:center;background:#164c2c;color:white;
+  padding:25px;line-height:1.8
+}
+.small{font-size:13px;color:#61705b;line-height:1.7}
+@media(max-width:600px){
+  header{justify-content:center;text-align:center}
+  nav{width:100%}
+  nav a{display:inline-block;margin:8px 5px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">🌿 GramBazaar</div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#categories">Categories</a>
+    <a href="#products">Products</a>
+    <a href="#cart">My Cart 🛒</a>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <h1>GramBazaar 🌾</h1>
+  <p>Gaon ki taazgi, aapke ghar tak!</p>
+  <p>Fresh Vegetables 🥕 | Quality Wood 🪵</p>
+  <p>Created by Raj Kumar Nayak | Class 9th</p>
+  <a class="btn" href="#products">Shop Now →</a>
+</section>
+
+<section id="categories">
+  <div class="heading">
+    <h2>Hamari Categories</h2>
+    <p>Apni pasand ke products chunein</p>
+  </div>
+
+  <div class="categories">
+    <div class="category" onclick="showCategory('Vegetables')">
+      <div class="emoji">🥦🥕🍅</div>
+      <h3>Fresh Vegetables</h3>
+      <p>Taazi hari sabziyan</p>
+    </div>
+    <div class="category" onclick="showCategory('Wood')">
+      <div class="emoji">🪵🌳</div>
+      <h3>Quality Wood</h3>
+      <p>Lakdi aur wood products</p>
+    </div>
+  </div>
+</section>
+
+<section id="products">
+  <div class="heading">
+    <h2>Hamare Products</h2>
+    <p>Quantity chunein aur cart mein add karein</p>
+  </div>
+  <div class="products" id="productList"></div>
+</section>
+
+<section id="cart">
+  <div class="heading">
+    <h2>🛒 Aapka Shopping Cart</h2>
+    <p>Order bhejne se pehle apna cart check karein</p>
+  </div>
+
+  <div id="cartItems"></div>
+  <div class="total">Total: ₹<span id="total">0</span></div>
+
+  <form id="customerForm">
+    <h3>Delivery Details</h3>
+    <input id="customerName" placeholder="Aapka poora naam" required>
+    <input id="customerPhone" type="tel"
+      placeholder="Mobile number" pattern="[0-9]{10}" required>
+    <textarea id="customerAddress" placeholder="Poora address"
+      rows="3" required></textarea>
+    <button class="btn" type="submit">
+      Order WhatsApp par bhejein
+    </button>
+    <p class="small">Order bhejne ke liye WhatsApp khulega.
+    Aapko message khud send karna hoga.</p>
+  </form>
+</section>
+
+<section>
+  <div class="heading">
+    <h2>Hamare Baare Mein</h2>
+  </div>
+  <div class="about-card">
+    <h3>Namaste! 🙏 Main Raj Kumar Nayak hoon.</h3>
+    <p style="margin-top:12px;line-height:1.8">
+      Main Class 9th ka student hoon. GramBazaar mera
+      business website project hai, jisme vegetables aur
+      wood products ko ek jagah dikhaya gaya hai.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <h2>🌿 GramBazaar</h2>
+  <p>Local Products • Quality • Bharosa</p>
+  <p>Created by Raj Kumar Nayak | Class 9th</p>
+  <p>© 2026 GramBazaar</p>
+</footer>
+
+<script>
+const products = [
+  {id:1,name:"Tamatar",category:"Vegetables",price:30,unit:"kg",emoji:"🍅"},
+  {id:2,name:"Aloo",category:"Vegetables",price:25,unit:"kg",emoji:"🥔"},
+  {id:3,name:"Pyaaz",category:"Vegetables",price:35,unit:"kg",emoji:"🧅"},
+  {id:4,name:"Bhindi",category:"Vegetables",price:40,unit:"kg",emoji:"🥬"},
+  {id:5,name:"Gajar",category:"Vegetables",price:40,unit:"kg",emoji:"🥕"},
+  {id:6,name:"Neem Wood",category:"Wood",price:500,unit:"unit",emoji:"🪵"},
+  {id:7,name:"Mango Wood",category:"Wood",price:700,unit:"unit",emoji:"🌳"},
+  {id:8,name:"Firewood",category:"Wood",price:250,unit:"bundle",emoji:"🪵"}
+];
+
+let cart = [];
+
+function renderProducts(list=products){
+  document.getElementById("productList").innerHTML=list.map(p=>`
+    <article class="product">
+      <div class="photo">${p.emoji}</div>
+      <h3>${p.name}</h3>
+      <p class="price">₹${p.price}/${p.unit}</p>
+      <label>Quantity:
+        <input id="qty-${p.id}" type="number" min="1"
+          max="999" value="1">
+      </label>
+      <button class="btn" onclick="addToCart(${p.id})">
+        Add to Cart +
+      </button>
+    </article>
+  `).join("");
+}
+
+function showCategory(category){
+  renderProducts(products.filter(p=>p.category===category));
+  document.getElementById("products").scrollIntoView();
+}
+
+function addToCart(id){
+  const p=products.find(item=>item.id===id);
+  const qty=Number(document.getElementById("qty-"+id).value);
+
+  if(!Number.isInteger(qty)||qty<1||qty>999){
+    alert("Kripya sahi quantity daalein.");
+    return;
+  }
+
+  const found=cart.find(item=>item.id===id);
+  if(found) found.qty+=qty;
+  else cart.push({...p,qty});
+
+  renderCart();
+  alert(p.name+" cart mein add ho gaya!");
+}
+
+function changeQty(id,delta){
+  const item=cart.find(p=>p.id===id);
+  if(!item)return;
+  item.qty+=delta;
+  if(item.qty<=0)cart=cart.filter(p=>p.id!==id);
+  renderCart();
+}
+
+function renderCart(){
+  const box=document.getElementById("cartItems");
+
+  if(cart.length===0){
+    box.innerHTML="<p>Aapka cart abhi khaali hai.</p>";
+  }else{
+    box.innerHTML=cart.map(p=>`
+      <div class="cart-row">
+        <div>${p.emoji} <b>${p.name}</b><br>
+        ₹${p.price} × ${p.qty} = ₹${p.price*p.qty}</div>
+        <div>
+          <button type="button" onclick="changeQty(${p.id},-1)">−</button>
+          ${p.qty}
+          <button type="button" onclick="changeQty(${p.id},1)">+</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  document.getElementById("total").textContent=
+    cart.reduce((sum,p)=>sum+p.price*p.qty,0);
+}
+
+document.getElementById("customerForm").addEventListener("submit",function(e){
+  e.preventDefault();
+
+  if(cart.length===0){
+    alert("Pehle cart mein product add karein.");
+    return;
+  }
+
+  const name=document.getElementById("customerName").value.trim();
+  const phone=document.getElementById("customerPhone").value.trim();
+  const address=document.getElementById("customerAddress").value.trim();
+
+  if(!name||!address||!/^[0-9]{10}$/.test(phone)){
+    alert("Naam, address aur sahi 10 digit mobile number bharein.");
+    return;
+  }
+
+  const lines=cart.map(p=>
+    `${p.name}: ${p.qty} ${p.unit} x Rs.${p.price} = Rs.${p.qty*p.price}`
+  );
+
+  const message=
+`Namaste GramBazaar!
+New Order
+
+Name: ${name}
+Mobile: ${phone}
+Address: ${address}
+
+Products:
+${lines.join("\n")}
+
+Total: Rs.${cart.reduce((sum,p)=>sum+p.price*p.qty,0)}`;
+
+  // Seller ka verified WhatsApp number yahan daalein.
+  const sellerNumber="919368465315";
+  const url="https://wa.me/"+sellerNumber+
+    "?text="+encodeURIComponent(message);
+
+  window.open(url,"_blank");
+});
+
+renderProducts();
+renderCart();
+</script>
+
+</body>
+</html>
